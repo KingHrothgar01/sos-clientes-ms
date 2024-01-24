@@ -146,7 +146,6 @@
     </dependencyManagement>
 
 	<build>
-		<finalName>sos-clientes-ms</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
