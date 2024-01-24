@@ -146,7 +146,6 @@
     </dependencyManagement>
 
 	<build>
-		<finalName>sos-clientes-ms</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -202,9 +201,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<username>repoUserName</username>
-        			<password>repoPassword</password>
-					<repository>kinghrothgar01/${project.name}</repository>
+                                        <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+					<repository>registry.hub.docker.com/kinghrothgar01/${project.name}</repository>
 					<tag>${project.version}</tag>
 					<skipDockerInfo>true</skipDockerInfo>
 				</configuration>
