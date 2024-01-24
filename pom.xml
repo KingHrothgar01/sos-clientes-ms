@@ -197,10 +197,13 @@
 						<id>default</id>
 						<goals>
 							<goal>build</goal>
+							<goal>push</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
+					<username>repoUserName</username>
+        			<password>repoPassword</password>
 					<repository>kinghrothgar01/${project.name}</repository>
 					<tag>${project.version}</tag>
 					<skipDockerInfo>true</skipDockerInfo>
