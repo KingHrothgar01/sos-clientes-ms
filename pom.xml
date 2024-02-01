@@ -205,6 +205,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
+						<phase>install</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
@@ -213,9 +214,8 @@
 				</executions>
 				<configuration>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-					<repository>registry.hub.docker.com/kinghrothgar01/${project.name}</repository>
+					<repository>kinghrothgar01/${project.name}</repository>
 					<tag>${project.version}</tag>
-					<skipDockerInfo>true</skipDockerInfo>
 				</configuration>
 			</plugin>
 		</plugins>
