@@ -25,12 +25,12 @@ pipeline {
         		sh 'mvn test'
       		}
     	}
-    	stage('Coverage') {
-      		steps {
-      		    // JaCoCo
-      		    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
-      		}
-    	}
+    	//stage('Coverage') {
+      	//	steps {
+      	//	    // JaCoCo
+      	//	    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent'
+      	//	}
+    	//}
     	stage('Code Analysis') {
       		steps {
       		    // SonarQube
@@ -49,6 +49,16 @@ pipeline {
       		    }
       		}
     	}
-    	
   	}
+  	
+  	post {
+        success {
+            jacoco(
+                execPattern: 'target/*.exec',
+                classPattern: 'target/classes',
+                sourcePattern: 'src/main/java',
+                exclusionPattern: 'src/test*'
+            )
+        }
+    }
 }
