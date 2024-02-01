@@ -10,12 +10,13 @@ pipeline {
 	    stage('Cleanup Workspace') {
       		steps {
       		    // Checkout the code from the repository
+      		    echo "Cleanup Workspace"
       		}
     	}
     	stage('Code Checkout') {
       		steps {
       		    // Checkout the code from the repository
-        		//checkout scm
+        		echo "checkout scm"
       		}
     	}
     	stage('Unit Testing') {
@@ -27,12 +28,13 @@ pipeline {
     	stage('Coverage') {
       		steps {
       		    // JaCoCo
-      		    //clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+      		    echo "clean org.jacoco:jacoco-maven-plugin:prepare-agent install"
       		}
     	}
     	stage('Code Analysis') {
       		steps {
       		    // SonarQube
+      		    echo "SonarQube"
       		    //withSonarQubeEnv(installationName: 'localSonar') {
       		    //    sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar'                                   
       		    //}
@@ -43,6 +45,7 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
         		//sh 'mvn clean package dockerfile:push'
+        		echo "Build Deploy Code"
       		}
     	}
     	
