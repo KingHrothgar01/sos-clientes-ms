@@ -28,7 +28,7 @@ pipeline {
     	stage('Coverage') {
       		steps {
       		    // JaCoCo
-      		    'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
+      		    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
       		}
     	}
     	stage('Code Analysis') {
