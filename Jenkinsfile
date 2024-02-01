@@ -25,12 +25,20 @@ pipeline {
         		sh 'mvn test'
       		}
     	}
-    	//stage('Coverage') {
-      	//	steps {
-      	//	    // JaCoCo
-      	//	    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent'
-      	//	}
-    	//}
+    	stage('Coverage') {
+      		steps {
+      		    // JaCoCo
+      		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
+      		    	sh 'mvn --batch-mode -s $MAVEN_SETTINGS_XML clean org.jacoco:jacoco-maven-plugin:prepare-agent'
+      		    	step([$class: 'JacocoPublisher', 
+      					execPattern: 'target/*.exec',
+      					classPattern: 'target/classes',
+      					sourcePattern: 'src/main/java',
+      					exclusionPattern: 'src/test*'
+					])
+      		    }
+      		}
+    	}
     	stage('Code Analysis') {
       		steps {
       		    // SonarQube
@@ -50,15 +58,4 @@ pipeline {
       		}
     	}
   	}
-  	
-  	post {
-        success {
-            jacoco(
-                execPattern: 'target/*.exec',
-                classPattern: 'target/classes',
-                sourcePattern: 'src/main/java',
-                exclusionPattern: 'src/test*'
-            )
-        }
-    }
 }
