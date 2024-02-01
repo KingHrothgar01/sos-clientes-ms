@@ -44,8 +44,7 @@ pipeline {
     	stage('Build Deploy Code') {
       		steps {
       		    // Build the Java Maven Project
-        		//sh 'mvn clean package dockerfile:push'
-        		echo "Build Deploy Code"
+        		sh 'mvn clean package dockerfile:push'
       		}
     	}
     	
