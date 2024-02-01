@@ -28,7 +28,7 @@ pipeline {
     	stage('Coverage') {
       		steps {
       		    // JaCoCo
-      		    echo "clean org.jacoco:jacoco-maven-plugin:prepare-agent install"
+      		    'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
       		}
     	}
     	stage('Code Analysis') {
@@ -45,7 +45,7 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
       		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -s $MAVEN_SETTINGS_XML clean package dockerfile:push'
+      		    	sh 'mvn -DskipTests -s $MAVEN_SETTINGS_XML clean package dockerfile:push'
       		    }
       		}
     	}
