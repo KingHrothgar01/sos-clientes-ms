@@ -36,7 +36,7 @@ pipeline {
       					execPattern: 'target/*.exec',
       					classPattern: 'target/classes',
       					sourcePattern: 'src/main/java',
-      					exclusionPattern: ['src/test*', 'com/sosa/SosClientesApplication**']
+      					exclusionPattern: 'src/test*'
 					])
       		    }
       		}
