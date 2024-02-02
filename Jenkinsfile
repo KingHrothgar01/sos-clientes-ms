@@ -31,7 +31,7 @@ pipeline {
       		    // JaCoCo
       		    echo "Jacoco"
       		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn --batch-mode -s $MAVEN_SETTINGS_XML clean org.jacoco:jacoco-maven-plugin:prepare-agent'
+      		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -s $MAVEN_SETTINGS_XML clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
       		    	step([$class: 'JacocoPublisher', 
       					execPattern: 'target/*.exec',
       					classPattern: 'target/classes',
