@@ -46,7 +46,7 @@ pipeline {
       		    // SonarQube
       		    echo "SonarQube"
       		    withSonarQubeEnv(installationName: 'localSonar') {
-      		        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar'                                   
+      		        sh 'mvn sonar:sonar -Dsonar.login=c48bde92f1575bdbbfc6755c45af599ecf3a6e9e'
       		    }
 
       		}
