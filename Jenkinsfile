@@ -1,5 +1,9 @@
 pipeline {
 	agent {label "master"}
+	
+	environment {
+	    SONAR_CREDENTIALS = credentials('092a3604-21d9-4423-a638-7ea0cf2e1d2d')
+	}
   
   	options {
     	buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
@@ -46,7 +50,7 @@ pipeline {
       		    // SonarQube
       		    echo "SonarQube"
       		    withSonarQubeEnv(installationName: 'localSonar') {
-      		        sh 'mvn sonar:sonar -Dsonar.login=c48bde92f1575bdbbfc6755c45af599ecf3a6e9e'
+      		        sh 'mvn sonar:sonar -Dsonar.login=$SONAR_CREDENTIALS'
       		    }
 
       		}
