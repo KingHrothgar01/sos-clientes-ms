@@ -342,13 +342,13 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para manejar la excepción cuándo el cliente ya existe.")
+	@DisplayName("Test para manejar la excepci\u00F3n cu\u00E1ndo el cliente ya existe - Escenario de error 10.")
 	void test_crear_cliente_error_11() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		when(clienteService.saveCliente(any(ClienteDTO.class))).thenThrow(HTTP400Exception.class);
 		
-		ResultActions response = mockMvc.perform(post("/prestamos/v1/clientes", 1)
+		ResultActions response = mockMvc.perform(post("/prestamos/v1/clientes")
 			    .contentType(MediaType.APPLICATION_JSON)
 			    .content(mapper.writeValueAsString(dto)));
 		
@@ -359,7 +359,7 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para manejar la excepción cuándo la DB es inalcanzable.")
+	@DisplayName("Test para manejar la excepción cuándo la DB es inalcanzable - Escenario de error 11.")
 	void test_crear_cliente_error_12() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: balanced
+  name: balanced
+  namespace: default
+spec:
+  replicas: 2
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: balanced
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: balanced
+    spec:
+      containers:
+      - image: kinghrothgar01/sos-clientes-ms:0.0.1-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        name: sos-clientes-ms
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: balanced
+  name: balanced
+  namespace: default
+spec:
+  ports:
+  - nodePort: 32486
+    port: 8092
+    protocol: TCP
+    targetPort: 8092
+  selector:
+    app: balanced
+  sessionAffinity: None
+  type: LoadBalancer

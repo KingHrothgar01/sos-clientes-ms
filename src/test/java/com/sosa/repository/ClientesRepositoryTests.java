@@ -95,7 +95,7 @@ class ClientesRepositoryTests {
 		clienteRepository.save(clienteCero);
 		
 		//when
-		Cliente clienteGuardado = clienteRepository.findById(clienteCero.getIdCliente()).get();
+		Cliente clienteGuardado = clienteRepository.findById(clienteCero.getIdCliente()).orElse(null);
 		clienteGuardado.setActivo(false);
 		clienteGuardado.setFechaActualizacion(fechaActualizacion);
 		clienteGuardado.setUsuarioActualiza("impersonator");
