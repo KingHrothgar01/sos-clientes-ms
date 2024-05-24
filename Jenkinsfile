@@ -65,14 +65,16 @@ pipeline {
     	}
     	stage('Trigger ManifestUpdate') {
     		steps {
-	       		echo "triggering updatemanifestjob"
-	       		
-	       		pom = readMavenPom file: 'pom.xml'
-				IMAGE = pom.artifactId
-				VERSION = pom.version
-				
-	    		echo "IMAGE: ${IMAGE}"
-	   			echo "VERSION: ${VERSION}"
+    		    script {
+		       		echo "triggering updatemanifestjob"
+		       		
+		       		pom = readMavenPom file: 'pom.xml'
+					IMAGE = pom.artifactId
+					VERSION = pom.version
+					
+		    		echo "IMAGE: ${IMAGE}"
+		   			echo "VERSION: ${VERSION}"
+		   		}
 	        	//build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
 	        }
     	}
