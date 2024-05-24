@@ -64,12 +64,14 @@ pipeline {
       		}
     	}
     	stage('Trigger ManifestUpdate') {
-       		echo "triggering updatemanifestjob"
-       		IMAGE = readMavenPom().getArtifactId()
-    		VERSION = readMavenPom().getVersion()
-    		echo "IMAGE: ${IMAGE}"
-   			echo "VERSION: ${VERSION}"
-        	//build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+    		steps {
+	       		echo "triggering updatemanifestjob"
+	       		IMAGE = readMavenPom().getArtifactId()
+	    		VERSION = readMavenPom().getVersion()
+	    		echo "IMAGE: ${IMAGE}"
+	   			echo "VERSION: ${VERSION}"
+	        	//build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+	        }
     	}
   	}
 }
