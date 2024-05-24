@@ -63,15 +63,13 @@ pipeline {
       		    }
       		}
     	}
-    	stage('Deploying sos-clientes-ms to Kubernetes') {
-    	    steps {
-    	        // Deploy to Minikube
-    	        script {
-    	            kubernetesDeploy(config: "deployment-sos-clientes-ms.yaml -n development")
-    	        }
-
-    	    }
+    	stage('Trigger ManifestUpdate') {
+       		echo "triggering updatemanifestjob"
+       		IMAGE = readMavenPom().getArtifactId()
+    		VERSION = readMavenPom().getVersion()
+    		echo "IMAGE: ${IMAGE}"
+   			echo "VERSION: ${VERSION}"
+        	//build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
     	}
-
   	}
 }
