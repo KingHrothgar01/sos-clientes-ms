@@ -18,7 +18,7 @@ pipeline {
       		    sh 'mvn --batch-mode -Dspring.profiles.active=test clean'
       		}
     	}
-    	stage('Code Checkout') {
+    	stage('Code Checkout from SCM') {
       		steps {
       		    // Checkout the code from the repository
         		echo "Checkout SCM"
@@ -63,7 +63,7 @@ pipeline {
       		    }
       		}
     	}
-    	stage('Trigger ManifestUpdate') {
+    	stage('Trigger Config Change Pipeline') {
     		steps {
     		    script {
 		       		echo "triggering updatemanifestjob"
@@ -74,8 +74,9 @@ pipeline {
 					
 		    		echo "IMAGE: ${IMAGE}"
 		   			echo "VERSION: ${VERSION}"
+		   			
+		   			build job: 'multibranch-sos-catalogos-ms-deploy/develop', parameters: [string(name: 'IMAGE_TAG', value: ${IMAGE})]
 		   		}
-	        	//build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
 	        }
     	}
   	}
