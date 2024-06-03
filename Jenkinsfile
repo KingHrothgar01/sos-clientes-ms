@@ -74,7 +74,7 @@ pipeline {
 					
 		    		echo "IMAGE: ${IMAGE}"
 		   			echo "VERSION: ${VERSION}"
-		   			build job: 'sos-catalogos-ms-deploy', parameters: [string(name: 'VERSION', value: ${VERSION})]
+		   			build job: 'sos-catalogos-ms-deploy', parameters: [string(name: 'VERSION', value: "${VERSION}")]
 		   		}
 	        }
     	}
