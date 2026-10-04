@@ -6,6 +6,7 @@ import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_001;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_003;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_006;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_009;
+import static com.sosa.util.Constants.CUSTOM_METRICS_LARGE_PAYLOAD;
 import static com.sosa.util.Constants.REGISTRO_ACTIVO;
 import static com.sosa.util.Constants.REGISTRO_INACTIVO;
 
@@ -109,7 +110,7 @@ public class ClienteService {
 		
 		if (dto.getSize() > APPLICATION_PARAMETER_LARGE_PAGE) {
 			LOGGER.info(APPLICATION_MESSAGE_002);
-			Metrics.counter("large_payload").increment();
+			Metrics.counter(CUSTOM_METRICS_LARGE_PAYLOAD).increment();
 		}
 		return transform(pageOfClients);
 	}

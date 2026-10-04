@@ -3,6 +3,7 @@ package com.sosa.service;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_001;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_003;
 import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_009;
+import static com.sosa.util.Constants.BUSINESS_MSG_ERR_C_006;
 import static com.sosa.util.Constants.USER_ALTA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.then;
@@ -166,6 +167,7 @@ class ClientesServiceTests {
 		
 		//then
 		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_C_009));
+		verify(clienteRepository, times(0)).save(any(Cliente.class));
 	}
 
 	@Test
@@ -189,11 +191,12 @@ class ClientesServiceTests {
 		given(clienteRepository.findById(anyString())).willReturn(Optional.empty());
 		
 		//when
-		assertThrows(HTTP404Exception.class, () -> {
+		HTTP404Exception thrown = assertThrows(HTTP404Exception.class, () -> {
 			clienteService.updateCliente(dto);
 		});
 		
 		//then
+		assertTrue(thrown.getMessage().contains(BUSINESS_MSG_ERR_C_006));
 		verify(clienteRepository, never()).save(any(Cliente.class));
 	}
 
@@ -308,8 +311,36 @@ class ClientesServiceTests {
 	}
 	
 	@Test
+	@DisplayName("Test para listar todos los clientes existentes, lista vac\u00EDa - Escenario de error 1.")
+	void test_listar_clientes_error_1() {
+		//given
+		paging = new PagingDTO();
+		paging.setPage(0);
+		paging.setSize(2);
+		paging.setOrder(Direction.DESC);
+		paging.setProperty("idCliente");
+		
+		PageImpl<Cliente> pagina = new PageImpl<Cliente>(
+				List.of(),PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).descending()), 0);
+		
+		given(clienteRepository.findAll(any(PageRequest.class))).willReturn(pagina);
+		
+		//when
+		Page<ClienteDTO> clientes = clienteService.findAllClientes(paging);
+		
+		//then
+		assertThat(clientes).isNotNull();
+		assertThat(clientes).isEmpty();
+		assertThat(clientes.getNumberOfElements()).isZero();
+		assertThat(clientes.getTotalPages()).isZero();
+		assertThat(clientes.getNumber()).isZero();
+		assertThat(clientes.getTotalElements()).isZero();
+		assertThat(clientes.getSort()).isEqualTo(Sort.by("idCliente").descending());
+	}
+	
+	@Test
 	@DisplayName("Test para listar todos los clientes existentes de forma ascendente con numero de pagina mayor a 50.")
-	void test_listar_clientes_ascendente_large_page() {
+	void test_listar_clientes_error_2() {
 		//given
 		paging = new PagingDTO();
 		paging.setPage(0);
@@ -348,7 +379,7 @@ class ClientesServiceTests {
 		PageImpl<Cliente> pagina = new PageImpl<Cliente>(
 				List.of(clienteNumberOne, clienteNumberTwo),PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).ascending()), 2);
 		
-		given(clienteRepository.findAll(PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).ascending()))).willReturn(pagina);
+		given(clienteRepository.findAll(any(PageRequest.class))).willReturn(pagina);
 		
 		//when
 		Page<ClienteDTO> clientes = clienteService.findAllClientes(paging);
@@ -361,33 +392,4 @@ class ClientesServiceTests {
 		assertThat(clientes.getTotalElements()).isEqualTo(2);
 		assertThat(clientes.getSort()).isEqualTo(Sort.by("idCliente").ascending());
 	}
-	
-	@Test
-	@DisplayName("Test para listar todos los clientes existentes, lista vacía - Escenario de error 1.")
-	void test_listar_clientes_error_1() {
-		//given
-		paging = new PagingDTO();
-		paging.setPage(0);
-		paging.setSize(2);
-		paging.setOrder(Direction.DESC);
-		paging.setProperty("idCliente");
-		
-		PageImpl<Cliente> pagina = new PageImpl<Cliente>(
-				List.of(),PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).descending()), 0);
-		
-		given(clienteRepository.findAll(PageRequest.of(paging.getPage(), paging.getSize(), Sort.by(paging.getProperty()).descending()))).willReturn(pagina);
-		
-		//when
-		Page<ClienteDTO> clientes = clienteService.findAllClientes(paging);
-		
-		//then
-		assertThat(clientes).isNotNull();
-		assertThat(clientes).isEmpty();
-		assertThat(clientes.getNumberOfElements()).isZero();
-		assertThat(clientes.getTotalPages()).isZero();
-		assertThat(clientes.getNumber()).isZero();
-		assertThat(clientes.getTotalElements()).isZero();
-		assertThat(clientes.getSort()).isEqualTo(Sort.by("idCliente").descending());
-	}
-
 }
