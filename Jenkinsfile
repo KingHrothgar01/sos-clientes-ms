@@ -15,9 +15,10 @@ pipeline {
       		steps {
       		    // Checkout the code from the repository
       		    echo "Cleanup Workspace"
+      		    sh 'mvn --batch-mode -Dspring.profiles.active=test clean'
       		}
     	}
-    	stage('Code Checkout') {
+    	stage('Code Checkout from SCM') {
       		steps {
       		    // Checkout the code from the repository
         		echo "Checkout SCM"
@@ -27,22 +28,20 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
       		    echo "Unit Tests"
-        		sh 'mvn test'
+        		sh 'mvn --batch-mode -Dspring.profiles.active=test test'
       		}
     	}
     	stage('Coverage') {
       		steps {
       		    // JaCoCo
       		    echo "Jacoco"
-      		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn --batch-mode -Dspring.profiles.active=test -s $MAVEN_SETTINGS_XML clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
-      		    	step([$class: 'JacocoPublisher', 
-      					execPattern: 'target/*.exec',
-      					classPattern: 'target/classes',
-      					sourcePattern: 'src/main/java',
-      					exclusionPattern: 'src/test*'
-					])
-      		    }
+  		    	sh 'mvn --batch-mode -Dspring.profiles.active=test clean org.jacoco:jacoco-maven-plugin:prepare-agent test package'
+  		    	step([$class: 'JacocoPublisher', 
+  					execPattern: 'target/*.exec',
+  					classPattern: 'target/classes',
+  					sourcePattern: 'src/main/java',
+  					exclusionPattern: 'src/test*'
+				])
       		}
     	}
     	stage('Code Analysis') {
@@ -59,10 +58,25 @@ pipeline {
       		steps {
       		    // Build the Java Maven Project
       		    echo "Dockerizing Application"
-      		    configFileProvider([configFile(fileId: '44874500-0411-492f-a487-6df02337c3d6', variable: 'MAVEN_SETTINGS_XML')]){
-      		    	sh 'mvn -s $MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
+      		    configFileProvider([configFile(fileId: '53844f09-dfd0-49ad-b86c-8573c2882609', variable: 'USER_MAVEN_SETTINGS_XML')]){
+      		    	sh 'mvn -s $USER_MAVEN_SETTINGS_XML clean package -DskipTests dockerfile:push'
       		    }
       		}
+    	}
+    	stage('Trigger Config Change Pipeline') {
+    		steps {
+    		    script {
+		       		echo "triggering updatemanifestjob"
+		       		
+		       		pom = readMavenPom file: 'pom.xml'
+					IMAGE = pom.artifactId
+					VERSION = pom.version
+					
+		    		echo "IMAGE: ${IMAGE}"
+		   			echo "VERSION: ${VERSION}"
+		   			build job: 'sos-clientes-ms-deploy', parameters: [string(name: 'VERSION', value: "${VERSION}")]
+		   		}
+	        }
     	}
   	}
 }

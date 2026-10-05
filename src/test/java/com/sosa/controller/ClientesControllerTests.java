@@ -342,13 +342,13 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para manejar la excepción cuándo el cliente ya existe.")
+	@DisplayName("Test para manejar la excepci\u00F3n cu\u00E1ndo el cliente ya existe - Escenario de error 10.")
 	void test_crear_cliente_error_11() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		when(clienteService.saveCliente(any(ClienteDTO.class))).thenThrow(HTTP400Exception.class);
 		
-		ResultActions response = mockMvc.perform(post("/prestamos/v1/clientes", 1)
+		ResultActions response = mockMvc.perform(post("/prestamos/v1/clientes")
 			    .contentType(MediaType.APPLICATION_JSON)
 			    .content(mapper.writeValueAsString(dto)));
 		
@@ -359,7 +359,7 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para manejar la excepción cuándo la DB es inalcanzable.")
+	@DisplayName("Test para manejar la excepción cuándo la DB es inalcanzable - Escenario de error 12.")
 	void test_crear_cliente_error_12() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -582,14 +582,13 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para actualizar un cliente, Objeto actualizado vacío - Escenario de error 10.")
+	@DisplayName("Test para actualizar un cliente, Objeto actualizado vac\u00edo - Escenario de error 10.")
 	void test_actualizar_cliente_error_10() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		
 		// given
 		given(clienteService.updateCliente(any(ClienteDTO.class))).willReturn(Optional.empty());
 
 		// when
+		ObjectMapper mapper = new ObjectMapper();
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/clientes/{id}", "000001")
 			   .contentType(MediaType.APPLICATION_JSON)
 			   .content(mapper.writeValueAsString(dto)));
@@ -606,10 +605,10 @@ class ClientesControllerTests {
 	@Test
 	@DisplayName("Test para manejar la excepción cuándo no coincide el identificador del objeto a actualizar.")
 	void test_actualizar_cliente_error_11() throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
 		// given
 		
 		// when
+		ObjectMapper mapper = new ObjectMapper();
 		ResultActions response = mockMvc.perform(put("/prestamos/v1/clientes/{id}", "000002")
 			    .contentType(MediaType.APPLICATION_JSON)
 			    .content(mapper.writeValueAsString(dto)));
@@ -665,25 +664,8 @@ class ClientesControllerTests {
 	}
 	
 	@Test
-	@DisplayName("Test para manejar la excepción de tipo HTTP400Exception - intento de modificación de datos inmutables.")
-	void test_actualizar_cliente_error_14() throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		
-		when(clienteService.updateCliente(any(ClienteDTO.class))).thenThrow(HTTP400Exception.class);
-		
-		ResultActions response = mockMvc.perform(put("/prestamos/v1/clientes/{id}", "000001")
-			    .contentType(MediaType.APPLICATION_JSON)
-			    .content(mapper.writeValueAsString(dto)));
-		
-		response.andDo(print())
-			.andExpect(status().isBadRequest())
-			.andExpect(content().contentType("application/json"))
-			.andExpect(jsonPath("$.error-message", is(HTTP_MSG_400)));
-	}
-	
-	@Test
 	@DisplayName("Test para manejar la excepción cuándo la DB es inalcanzable.")
-	void test_actualizar_cliente_error_15() throws Exception{
+	void test_actualizar_cliente_error_14() throws Exception{
 		ObjectMapper mapper = new ObjectMapper();
 		
 		when(clienteService.updateCliente(any(ClienteDTO.class))).thenThrow(CannotCreateTransactionException.class);

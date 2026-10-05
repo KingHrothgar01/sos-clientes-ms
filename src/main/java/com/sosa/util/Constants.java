@@ -38,6 +38,8 @@ public final class Constants {
 	public static final String BUSINESS_MSG_ERR_C_014 = "No fue posible dar de baja cliente.";
 	public static final String BUSINESS_MSG_ERR_C_015 = "No fue posible actualizar cliente.";
 	
+	public static final String CUSTOM_METRICS_LARGE_PAYLOAD = "large_payload";
+	
 	public static final String SPECIFICATION_FIELD_ID = "id";
 	public static final String SPECIFICATION_FIELD_NUMANIO = "anio";
 	public static final String SPECIFICATION_FIELD_NUMMES = "mes";
